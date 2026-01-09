@@ -21,7 +21,6 @@ This project has been refactored into a modular and configurable architecture to
 ## Key Features
 
 -   **Full Covariance Modeling**: Improves latent space expressivity over standard diagonal VAEs.
--   **Modular Architecture**: Code is organized into logical modules (`config`, `data`, `core`, `analysis`).
 -   **Centralized Configuration**: All experiment parameters are managed through YAML files.
 -   **Per-Cell-Type Training**: Preserves intra-type heterogeneity.
 -   **Flexible Latent Sampling**: Supports multiple strategies for generating synthetic data.
@@ -38,28 +37,35 @@ The model supports four different strategies to generate synthetic data from the
 
 ## Project Structure
 
-```
-.
-├── README.md
-├── RELEASE_NOTES.md
-├── requirements.txt
-├── configs/
-│   ├── local.yaml
-│   └── server.yaml
-├── data/
-│   └── adata_raw_reanotado_peng_octubre.h5ad
-├── output/
-│   ├── adatas/
-│   ├── models/
-│   └── plots/
-└── src/
-    ├── __init__.py
-    ├── main.py
-    ├── analysis/
-    ├── core/
-    ├── data/
-    └── model/
-```
+The codebase is organized into four main modules within the `src/` directory:
+
+### `src/model/`
+
+Contains the core model implementation and training scripts.
+
+-   **`LVAE_model.ipynb`**: Implementation of the LVAE architecture, training loops, and loss function definitions. This is the entry point for training the model on your own datasets.
+
+### `src/benchmarks/`
+
+Scripts dedicated to validating the quality and fidelity of the generated data.
+
+-   **`fidelity_stats.ipynb`**: Statistical comparison between real and synthetic data (e.g., LVAE, scRDiT, scDesign2). Computes metrics like Mann-Whitney U tests, AUC, and visualizes gene expression distributions using boxplots and heatmaps.
+-   **`integration_metrics.ipynb`**: Evaluates how well synthetic data integrates with real data using batch-correction methods (Harmony, Scanorama, BBKNN, ComBat). Computes integration scores like **iLISI** (integration quality) and **Silhouette** (cluster preservation).
+
+### `src/analysis/`
+
+Downstream biological analysis to verify if the synthetic data preserves biological signals.
+
+-   **`gene_correlation.ipynb`**: Analysis of gene-gene co-expression patterns (e.g., Pearson correlation heatmaps) to ensure regulatory networks are maintained.
+-   **`label_transfer_knn.ipynb`**: Uses k-Nearest Neighbors (k-NN) to transfer labels from real to synthetic data, assessing if cell types are distinct and recognizable in the synthetic latent space.
+-   **`trajectory_pseudotime.ipynb`**: Infers biological trajectories (e.g., differentiation paths) using Diffusion Maps and Pseudotime (DPT) to check if the model captures continuous developmental processes (e.g., Mus musculus).
+
+### `src/visualization/`
+
+Visualization tools for qualitative assessment.
+
+-   **`global_umap.ipynb`**: Generates global UMAP embeddings to visualize the overlap and structure of real vs. synthetic datasets.
+-   **`marker_dotplots.ipynb`**: Creates dot plots to compare the expression of key marker genes across cell types between real and synthetic data.
 
 ## Installation
 
@@ -74,35 +80,6 @@ The model supports four different strategies to generate synthetic data from the
     ```bash
     pip install -r requirements.txt
     ```
-
-## Usage
-
-The main training pipeline is orchestrated by `src/main.py`. Run it from the project root, specifying a configuration file using the `--config` argument.
-
--   **Local Development (Debug Mode)**:
-
-    ```bash
-    python src/main.py --config configs/local.yaml
-    ```
-
--   **Full Training Run**:
-    ```bash
-    python src/main.py --config configs/server.yaml
-    ```
-
-If no config file is specified, `configs/local.yaml` is used by default.
-
-## Configuration
-
-Experiment parameters are defined in YAML files within the `configs/` directory. This allows you to modify hyperparameters, paths, and model settings without changing the code.
-
-## Artifacts Produced
-
-All outputs are saved in the `output/` directory:
-
--   **Model Checkpoints**: `output/models/{cell_type}_best_model.pth`
--   **Synthetic Datasets**: `output/adatas/{cell_type}_syn.h5ad` or `output/synthetic/{category}_synthetic.csv`
--   **Figures and Plots**: `output/plots/`
 
 ## Contributing & Contact
 
