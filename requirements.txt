@@ -34,6 +34,7 @@ intervaltree
 ipykernel
 ipython
 ipython_pygments_lexers
+kneed
 jedi
 Jinja2
 joblib
