@@ -57,6 +57,7 @@ Scripts dedicated to validating the quality and fidelity of the generated data.
 
 Downstream biological analysis to verify if the synthetic data preserves biological signals.
 
+- **`differential_expression.ipynb`**: Performs differential expression analysis (DEA) and functional enrichment (KEGG, GO) to verify if synthetic cell populations preserve biologically meaningful transcriptional signatures and pathways.
 - **`gene_correlation.ipynb`**: Analysis of gene-gene co-expression patterns (e.g., Pearson correlation heatmaps) to ensure regulatory networks are maintained.
 - **`label_transfer_knn.ipynb`**: Uses k-Nearest Neighbors (k-NN) to transfer labels from real to synthetic data, assessing if cell types are distinct and recognizable in the synthetic latent space.
 - **`trajectory_pseudotime.ipynb`**: Infers biological trajectories (e.g., differentiation paths) using Diffusion Maps and Pseudotime (DPT) to check if the model captures continuous developmental processes (e.g., Mus musculus).
