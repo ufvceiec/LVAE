@@ -212,3 +212,6 @@ output/
 
 # Track src/data
 !src/data/
+
+# MacOS
+.DS_Store
